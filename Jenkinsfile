@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'openjdk:17-jdk-slim'
-            args '-u root --network cicd_net'
+            args '-u root --network lab13tdo_cicd_net'
         }
     }
     environment {
