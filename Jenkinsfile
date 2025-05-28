@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'openjdk:17-jdk-slim'
-            args '-u root'
+            args '-u root --network cicd_net'
         }
     }
     environment {
@@ -73,13 +73,16 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarQubeScanner'
                     withSonarQubeEnv('SonarQube') {
-                        sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=your_project_key \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=${env.SONARQUBE_URL} \
-                        -Dsonar.login=${env.SONAR_TOKEN}
-                        """
+                        sh (
+                            script: """
+                                ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=your_project_key \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=${env.SONARQUBE_URL} \
+                                -Dsonar.login=${env.SONAR_TOKEN}
+                            """,
+                            returnStdout: false
+                        )
                     }
                 }
             }
