@@ -57,19 +57,22 @@ pipeline {
         }
 
         stage('SonarQube analysis') {
-                    steps {
-                        withSonarQubeEnv('SonarQube') {
-                            sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=your_project_key \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=${SONARQUBE_URL} \
-                            -Dsonar.login=${SONAR_TOKEN}
-                            """
-                        }
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=your_project_key \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=${env.SONARQUBE_URL} \
+                        -Dsonar.login=${env.SONAR_TOKEN}
+                        """
                     }
-
+                }
+            }
         }
+
     }
 
     post {
