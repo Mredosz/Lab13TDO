@@ -1,6 +1,10 @@
 pipeline {
-    agent any
-
+    agent {
+            docker {
+                image 'node:16'
+                args '-u root'
+            }
+        }
     environment {
         SONARQUBE_SERVER = 'SonarQube'
         SONARQUBE_URL = 'http://sonarqube:9000'
