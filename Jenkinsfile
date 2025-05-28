@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'openjdk:17'
+            image 'openjdk:17-jdk-slim'
             args '-u root'
         }
     }
@@ -9,32 +9,38 @@ pipeline {
         SONARQUBE_SERVER = 'SonarQube'
         SONARQUBE_URL = 'http://sonarqube:9000'
     }
+
     stages {
-        stage('Setup Node') {
+        stage('Setup Node.js') {
             steps {
                 sh '''
-                    apt-get update
-                    apt-get install -y curl
+                    apt-get update && apt-get install -y curl
                     curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
                     apt-get install -y nodejs
+                    node -v
+                    npm -v
                 '''
             }
         }
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Install dependencies') {
             steps {
                 sh 'npm install'
             }
         }
+
         stage('Lint') {
             steps {
                 sh 'npm run lint'
             }
         }
+
         stage('Unit Tests') {
             steps {
                 sh 'npm test'
@@ -45,6 +51,7 @@ pipeline {
                 }
             }
         }
+
         stage('Coverage') {
             steps {
                 sh 'npm run test'
@@ -59,6 +66,7 @@ pipeline {
                 }
             }
         }
+
         stage('SonarQube analysis') {
             steps {
                 script {
@@ -76,6 +84,7 @@ pipeline {
             }
         }
     }
+
     post {
         success {
             echo 'Pipeline zakończony sukcesem.'
