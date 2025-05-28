@@ -1,7 +1,7 @@
 pipeline {
     agent {
             docker {
-                image 'node:20'
+                image 'openjdk:17'
                 args '-u root'
             }
         }
