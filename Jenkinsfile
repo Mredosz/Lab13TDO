@@ -43,7 +43,7 @@ pipeline {
 
         stage('Coverage') {
             steps {
-                sh 'npm run coverage'
+                sh 'npm run test'
             }
             post {
                 always {
