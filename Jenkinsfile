@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:16'
-            args '-u root'
-        }
-    }
+    agent any
 
     environment {
         SONARQUBE_SERVER = 'SonarQube'
