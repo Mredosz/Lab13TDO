@@ -72,8 +72,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Testing connectivity to SonarQube..."
-                    ping -c 2 sonarqube
-                    curl -s http://sonarqube:9000/api/system/status
+                    curl -s --head http://sonarqube:9000/api/system/status || exit 1
                 '''
             }
         }
