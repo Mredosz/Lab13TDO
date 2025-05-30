@@ -68,16 +68,6 @@ pipeline {
             }
         }
 
-        stage('Test SonarQube connectivity') {
-            steps {
-                sh '''
-                    echo "Testing connectivity to SonarQube..."
-                    curl -s --head http://sonarqube:9000/api/system/status || exit 1
-                '''
-            }
-        }
-
-
         stage('SonarQube analysis') {
             steps {
                 script {
